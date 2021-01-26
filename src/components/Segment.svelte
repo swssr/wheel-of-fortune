@@ -1,8 +1,14 @@
 <script>
-  export const value = null;
+  export let value = "";
+  export let ref;
 </script>
 
-<div class="wheel__segment" />
+<div
+  bind:this={ref}
+  id={value}
+  class="wheel__segment"
+  style="border-top-color: {value || 'red'}"
+/>
 
 <style>
   .wheel__segment {
@@ -21,7 +27,7 @@
     height: 50px;
   }
   .wheel__segment:nth-child(1) {
-    border-top: var(--bt) solid #ff9fe4;
+    border-top: var(--bt) solid transparent;
     left: 50%;
     position: absolute;
     transform: rotate(0deg);
@@ -29,13 +35,13 @@
 
   .wheel__segment:nth-child(2) {
     left: 50%;
-    border-top: var(--bt) solid #009f52;
+    border-top: var(--bt) solid transparent;
     position: absolute;
     transform: rotate(60deg);
   }
 
   .wheel__segment:nth-child(3) {
-    border-top: var(--bt) solid #ff0000;
+    border-top: var(--bt) solid transparent;
 
     left: 50%;
     position: absolute;
