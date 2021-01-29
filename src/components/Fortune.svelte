@@ -1,11 +1,27 @@
 <script>
+  import qs from "query-string";
+  import Select from "svelte-select";
+
   import { onMount } from "svelte";
-  import { each } from "svelte/internal";
+  // import { each } from "svelte/internal";
   import Arrow from "./Arrow.svelte";
 
-  import Segment from "./Segment.svelte";
+  // import Segment from "./Segment.svelte";
 
   export let spinDuration;
+
+  let parsed = {};
+  let config = false;
+  let gameOdds = [
+    { label: "Lose", value: 0 },
+    { label: "Win", value: 100 },
+  ];
+  let currentOdds = { label: "Win", value: 100 };
+  let selectedValue = {
+    label: "4th_street_yellow",
+    value: "4th_street_yellow",
+  };
+  let future = "";
 
   let wheel;
   let resetBtn;
@@ -28,7 +44,7 @@
     { id: "trap_1", odds: 90, bg: "", rotation: { from: 3498, to: 3539 } },
     {
       id: "savanna_pack_bottle",
-      odds: 60,
+      odds: 100,
       bg: "",
       rotation: { from: 3539, to: 3585 },
     },
@@ -48,13 +64,12 @@
     },
     { id: "trap_3", odds: 0, bg: "", rotation: { from: 3765, to: 3810 } },
   ];
+  const _traps = options.filter((v) => v.id.includes("trap"));
+  let _wins = options.filter((v) => !v.id.includes("trap"));
 
   function computeWin() {
-    const _traps = options.filter((v) => v.id.includes("trap"));
-    const _wins = options.filter((v) => !v.id.includes("trap"));
-
     console.log(_traps);
-    const gameOdds = 100;
+    const gameOdds = currentOdds.value;
     const _randomNum = Math.random() * 100;
 
     console.log("odds", gameOdds);
@@ -65,18 +80,18 @@
     if (gameWon) {
       //DONE: Need to randomly select from _wins range ✔.
       //Compute prize with highest winning odds.
-      console.log({ _wins });
-      for (const _option of _wins) {
+      for (const _option of options) {
         if (_option.odds >= highestOddsYet) {
           optionHighestOds = _option;
           highestOddsYet = _option.odds;
 
           rotation =
             optionHighestOds.rotation.from +
-            Math.floor(Math.random() * increments);
+            Math.floor(1 + Math.random() * increments);
         }
       }
-      console.log("Should win a", optionHighestOds.id);
+      future = "Should win a " + optionHighestOds.id;
+      console.log(future);
     } else {
       //TODO: Need to randomly select from _trap range.
       console.log("Should lose");
@@ -85,10 +100,11 @@
       );
       rotation =
         _traps[randomIndex].rotation.from +
-        Math.floor(Math.random() * increments);
+        Math.floor(1 + Math.random() * increments);
     }
   }
   function spinThatWheel(e) {
+    computeWin();
     animateWheel(spinDuration);
     slowingDown = true;
   }
@@ -116,8 +132,43 @@
     });
   }
 
+  function toggleWin(event) {
+    console.log({ event });
+    shouldWin = value === "true" ? true : false;
+  }
+  function handleChange(event) {
+    console.log({ event });
+    _wins = _wins.map((v) => {
+      if (v.id == value) {
+        return (v.odds = 100);
+      }
+    });
+  }
+
+  function handleSelect(event) {
+    console.log("selected item:", event.detail);
+    console.log({ _wins });
+    _wins = _wins.map((v) => {
+      if (v.id == event.detail.value) {
+        future = "Should win a " + event.detail.value;
+        return (v.odds = 100);
+      }
+    });
+  }
+  function handleWonSelect(event) {
+    console.log("selected item:", event.detail);
+    currentOdds = event.detail;
+    if (event.detail.value === 0) future = "Should lose";
+  }
+
+  let items = _wins.map(({ id }) => ({ value: id, label: id }));
   onMount(() => {
     computeWin();
+
+    if (typeof window !== "undefined") {
+      parsed = qs.parse(window.location.search);
+      console.log({ parsed });
+    }
   });
 </script>
 
@@ -126,20 +177,72 @@
     <strong>BRAND NAME</strong>
     <h1>WHEEL OF FORTUNE</h1>
     <p>TAP <strong>SPIN WHEEL</strong> TO PLAY</p>
+
+    <code>Testing: <br /> {future}</code>
   </header>
   <Arrow />
   <div bind:this={wheel} class="wheel">
-    {#each options as { id, bg } (id)}
+    <!-- {#each options as { id, bg } (id)}
       <Segment value={bg} ref={bg} />
-    {/each}
+    {/each} -->
   </div>
 
   <button on:click={spinThatWheel} bind:this={resetBtn} class="btn"
     >SPIN WHEEL</button
   >
 </div>
+<div class="wrapper">
+  <button class="btn-config" on:click={() => (config = !config)}
+    ><img
+      src="https://www.flaticon.com/svg/vstatic/svg/3524/3524659.svg?token=exp=1611924618~hmac=f3b67bbf5cda7b19a4863d52643108df"
+      alt=""
+    /></button
+  >
+
+  {#if config}
+    <div class="test-config">
+      <Select
+        items={gameOdds}
+        selectedValue={currentOdds}
+        on:select={handleWonSelect}
+        isClearable={false}
+      />
+      <Select
+        isDisabled={!currentOdds.value}
+        {items}
+        {selectedValue}
+        on:select={handleSelect}
+        isClearable={false}
+      />
+    </div>
+  {/if}
+</div>
 
 <style>
+  .wrapper {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+  }
+  .btn-config {
+    width: 2em;
+    height: 2em;
+  }
+  .test-config {
+    position: fixed;
+    display: flex;
+    height: max-content;
+    padding: 1em;
+    left: 10%;
+    background-color: #fff;
+    z-index: 100;
+    border-radius: 8px;
+    box-shadow: 0 0 26px #000;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
   .game {
     display: flex;
     overflow: hidden;
@@ -168,6 +271,19 @@
     left: 50%;
     overflow: hidden;
     transform: scale(0.75);
+  }
+  .wheel::after {
+    content: "";
+    position: fixed;
+    width: 3.5em;
+    height: 3.5em;
+    border-radius: 50%;
+    background: url(https://res.cloudinary.com/tumi/image/upload/v1611923254/logo.svg)
+      no-repeat;
+    background-size: cover;
+    top: 50%;
+    margin-top: -3px;
+    transform: translate(-50%, -50%);
   }
 
   .btn {

@@ -22,11 +22,11 @@
     transform-origin: 50% 100%;
     display: none;
   }
-  .value {
+  /* .value {
     position: absolute;
     width: 50px;
     height: 50px;
-  }
+  } */
   .wheel__segment:nth-child(1) {
     border-top: var(--bt) solid transparent;
     left: 50%;
