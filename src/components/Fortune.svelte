@@ -33,7 +33,7 @@
   const _wins = options.filter((v) => !v.id.includes("trap"));
 
   console.log(_traps);
-  const odds = 0.5;
+  const odds = 0.7;
   const _randomNum = Math.random();
 
   console.log("odds", odds);
