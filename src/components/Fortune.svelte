@@ -148,6 +148,8 @@
   function handleSelect(event) {
     console.log("selected item:", event.detail);
     console.log({ _wins });
+    selectedValue = event.detail;
+
     _wins = _wins.map((v) => {
       if (v.id == event.detail.value) {
         future = "Should win a " + event.detail.value;
