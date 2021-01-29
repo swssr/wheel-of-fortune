@@ -48,8 +48,9 @@
     padding: 2em;
     background: url(https://res.cloudinary.com/tumi/image/upload/v1611664122/game-bg.jpg)
       no-repeat;
-    background-size: contain;
+    background-size: cover;
     background-position: -1% -1%;
     height: 100%;
+    width: 100%;
   }
 </style>

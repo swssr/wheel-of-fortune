@@ -177,8 +177,6 @@
     <strong>BRAND NAME</strong>
     <h1>WHEEL OF FORTUNE</h1>
     <p>TAP <strong>SPIN WHEEL</strong> TO PLAY</p>
-
-    <code>Testing: <br /> {future}</code>
   </header>
   <Arrow />
   <div bind:this={wheel} class="wheel">
@@ -190,15 +188,16 @@
   <button on:click={spinThatWheel} bind:this={resetBtn} class="btn"
     >SPIN WHEEL</button
   >
+
+  <code>Testing: {future}</code>
 </div>
 <div class="wrapper">
   <button class="btn-config" on:click={() => (config = !config)}
     ><img
-      src="https://www.flaticon.com/svg/vstatic/svg/3524/3524659.svg?token=exp=1611924618~hmac=f3b67bbf5cda7b19a4863d52643108df"
+      src="https://res.cloudinary.com/tumi/image/upload/v1611929832/settings.svg"
       alt=""
     /></button
   >
-
   {#if config}
     <div class="test-config">
       <Select
@@ -219,6 +218,13 @@
 </div>
 
 <style>
+  code {
+    position: absolute;
+    bottom: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+  }
   .wrapper {
     position: absolute;
     top: 1em;
@@ -271,6 +277,14 @@
     left: 50%;
     overflow: hidden;
     transform: scale(0.75);
+  }
+  @media (max-width: 320px) {
+    .wheel {
+      transform: scale(0.6);
+    }
+    .arrow {
+      transform: scale(0.8);
+    }
   }
   .wheel::after {
     content: "";

@@ -66,4 +66,9 @@
     z-index: 3;
     transform-origin: center;
   }
+  @media (max-width: 320px) {
+    .arrow {
+      transform: translate(-50%, 15%) scale(0.7);
+    }
+  }
 </style>
