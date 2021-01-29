@@ -68,7 +68,7 @@
   }
   @media (max-width: 320px) {
     .arrow {
-      transform: translate(-50%, 15%) scale(0.7);
+      transform: translate(-50%, 10%) scale(0.7);
     }
   }
 </style>
