@@ -4,11 +4,13 @@
 
   import Segment from "./Segment.svelte";
 
+  export let spinDuration;
+
   let wheel;
   let resetBtn;
   let refs = {};
 
-  let rotation = 0;
+  let rotation = 3780;
   let scale = 1;
   let slowingDown = false;
   let pressed = {};
@@ -16,13 +18,15 @@
   window.addEventListener("keydown", handleKeyDown, false);
   window.addEventListener("keyup", handleKeyUp, false);
 
+  //40deg increments from first prize
   const options = [
-    { bg: "#ff9fe4", win: { from: 0, to: 0 } },
-    { bg: "#009f52", win: { from: 0, to: 0 } },
-    { bg: "#ff0000", win: { from: 0, to: 0 } },
-    { bg: "orange", win: { from: 0, to: 0 } },
-    { bg: "paleturquoise", win: { from: 0, to: 0 } },
-    { bg: "purple", win: { from: 0, to: 0 } },
+    { bg: "trap_1", win: { from: 3498, to: 3539 } },
+    { bg: "savanna_pack_bottle", win: { from: 3539, to: 3585 } },
+    { bg: "4th_yellow", win: { from: 3585, to: 3630 } },
+    { bg: "trap_2", win: { from: 3630, to: 3675 } },
+    { bg: "paarl", win: { from: 3675, to: 3720 } },
+    { bg: "hunters_pack", win: { from: 3720, to: 3765 } },
+    { bg: "trap_3", win: { from: 3765, to: 3810 } },
   ];
 
   function handleKeyDown(e) {
@@ -55,29 +59,31 @@
   function spinThatWheel(e) {
     if (!pressed[e.which]) return;
     // let duration = Math.floor((e.timeStamp - pressed[e.which]) / 25);
-    let duration = Math.random() * 8 + 2;
-    
+    let duration = 9 || Math.random() * 8 + 2;
+
     console.log({ duration });
 
     if (duration > 150) duration = 150;
 
-    animateWheel(duration);
+    animateWheel(spinDuration);
     slowingDown = true;
     pressed[e.which] = 0;
   }
 
   function animateWheel(duration) {
-    let randomNum = Math.floor(Math.random() * 50);
-    rotation += 30 * duration + 30 * randomNum;
+    // let randomNum = Math.floor(Math.random() * 50);
+    // let randomNum = 10;
+    // rotation += 30 * duration + 30 * randomNum;
     TweenMax.to(wheel, 10, {
       ease: Power4.easeOut,
-      rotation: rotation,
+      rotation,
       onComplete: resetWheel,
     });
   }
 
   function resetWheel() {
     slowingDown = false;
+    rotation = 0;
   }
 
   onMount(() => {
@@ -98,7 +104,8 @@
       height="57"
       viewBox="0 0 62 57"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g filter="url(#filter0_d)">
         <path
           d="M31 49L4.15321 0.250003L57.8468 0.250007L31 49Z"
@@ -118,7 +125,8 @@
           width="61.6936"
           height="56.75"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB">
+          color-interpolation-filters="sRGB"
+        >
           <feFlood flood-opacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
@@ -183,7 +191,9 @@
   }
 
   .wheel {
-    background-color: white;
+    /* background-color: white; */
+    background-image: url("https://res.cloudinary.com/tumi/image/upload/v1611906746/wheel2.png");
+    background-size: cover;
     width: 400px;
     height: 400px;
     margin-left: -200px;
@@ -192,9 +202,9 @@
     position: absolute;
     top: 55%;
     left: 50%;
-    border: 2px solid white;
     overflow: hidden;
-    box-shadow: 0px 0px 10px 10px #000;
+
+    /* box-shadow: 0px 0px 10px 10px #000; */
     transform: scale(0.75);
   }
 

@@ -20,6 +20,7 @@
     border-right-width: var(--s);
     margin-left: calc(var(--s) * -1);
     transform-origin: 50% 100%;
+    display: none;
   }
   .value {
     position: absolute;

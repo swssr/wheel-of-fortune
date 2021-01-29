@@ -19,21 +19,25 @@
     callToAction: {
       btnText: "",
       type: "http" || "action" || "deeplink",
+      deeplink: "",
+      http: "",
+      intent: "",
       styleProps: { textColor: "", fontSize: 0, fontWeight: 0 },
     },
+    spinDuration: 3,
     prizes: [
-      { bgImg: "", bgColor: "#ff9fe4", win: { from: 0, to: 0 } },
-      { bgImg: "", bgColor: "#009f52", win: { from: 0, to: 0 } },
-      { bgImg: "", bgColor: "#ff0000", win: { from: 0, to: 0 } },
-      { bgImg: "", bgColor: "orange", win: { from: 0, to: 0 } },
-      { bgImg: "", bgColor: "paleturquoise", win: { from: 0, to: 0 } },
-      { bgImg: "", bgColor: "purple", win: { from: 0, to: 0 } },
+      { bgImg: "", bgColor: "#ff9fe4", win: { from: 1, to: 3 } },
+      { bgImg: "", bgColor: "#009f52", win: { from: 3, to: 5 } },
+      { bgImg: "", bgColor: "#ff0000", win: { from: 5, to: 7 } },
+      { bgImg: "", bgColor: "orange", win: { from: 7, to: 9 } },
+      { bgImg: "", bgColor: "paleturquoise", win: { from: 9, to: 11 } },
+      { bgImg: "", bgColor: "purple", win: { from: 11, to: 13 } },
     ],
   };
 </script>
 
 <main>
-  <Fortune />
+  <Fortune spinDuration={pageModel.spinDuration} />
 </main>
 
 <style>
