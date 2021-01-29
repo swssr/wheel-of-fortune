@@ -20,14 +20,34 @@
 
   //40deg increments from first prize
   const options = [
-    { bg: "trap_1", win: { from: 3498, to: 3539 } },
-    { bg: "savanna_pack_bottle", win: { from: 3539, to: 3585 } },
-    { bg: "4th_yellow", win: { from: 3585, to: 3630 } },
-    { bg: "trap_2", win: { from: 3630, to: 3675 } },
-    { bg: "paarl", win: { from: 3675, to: 3720 } },
-    { bg: "hunters_pack", win: { from: 3720, to: 3765 } },
-    { bg: "trap_3", win: { from: 3765, to: 3810 } },
+    { id: "trap_1", bg: "", rotation: { from: 3498, to: 3539 } },
+    { id: "savanna_pack_bottle", bg: "", rotation: { from: 3539, to: 3585 } },
+    { id: "4th_yellow", bg: "", rotation: { from: 3585, to: 3630 } },
+    { id: "trap_2", bg: "", rotation: { from: 3630, to: 3675 } },
+    { id: "paarl", bg: "", rotation: { from: 3675, to: 3720 } },
+    { id: "hunters_pack", bg: "", rotation: { from: 3720, to: 3765 } },
+    { id: "trap_3", bg: "", rotation: { from: 3765, to: 3810 } },
   ];
+
+  const _traps = options.filter((v) => v.id.includes("trap"));
+  const _wins = options.filter((v) => !v.id.includes("trap"));
+
+  console.log(_traps);
+  const odds = 0.5;
+  const _randomNum = Math.random();
+
+  console.log("odds", odds);
+  console.log("random number", _randomNum);
+
+  if (_randomNum < odds) {
+    //TODO: Need to randomly select from _trap range.
+    console.log("Should lose");
+    rotation = 3640;
+  } else {
+    //TODO: Need to randomly select from _wins range.
+    rotation = 3730;
+    console.log("Should win");
+  }
 
   function handleKeyDown(e) {
     if (e.keyCode === 32 && slowingDown === false) {
@@ -156,7 +176,7 @@
   </div>
 
   <div bind:this={wheel} class="wheel">
-    {#each options as { bg } (bg)}
+    {#each options as { id, bg } (id)}
       <Segment value={bg} ref={bg} />
     {/each}
   </div>
