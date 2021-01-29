@@ -15,6 +15,8 @@
   let slowingDown = false;
   let pressed = {};
 
+  let gameWon;
+
   window.addEventListener("keydown", handleKeyDown, false);
   window.addEventListener("keyup", handleKeyUp, false);
 
@@ -39,14 +41,16 @@
   console.log("odds", odds);
   console.log("random number", _randomNum);
 
-  if (_randomNum < odds) {
-    //TODO: Need to randomly select from _trap range.
-    console.log("Should lose");
-    rotation = 3640;
-  } else {
+  gameWon = _randomNum > odds;
+
+  if (gameWon) {
     //TODO: Need to randomly select from _wins range.
     rotation = 3730;
     console.log("Should win");
+  } else {
+    //TODO: Need to randomly select from _trap range.
+    console.log("Should lose");
+    rotation = 3640;
   }
 
   function handleKeyDown(e) {
@@ -77,33 +81,24 @@
   }
 
   function spinThatWheel(e) {
-    if (!pressed[e.which]) return;
-    // let duration = Math.floor((e.timeStamp - pressed[e.which]) / 25);
-    let duration = 9 || Math.random() * 8 + 2;
-
-    console.log({ duration });
-
-    if (duration > 150) duration = 150;
-
     animateWheel(spinDuration);
     slowingDown = true;
     pressed[e.which] = 0;
   }
 
   function animateWheel(duration) {
-    // let randomNum = Math.floor(Math.random() * 50);
-    // let randomNum = 10;
-    // rotation += 30 * duration + 30 * randomNum;
     TweenMax.to(wheel, 10, {
       ease: Power4.easeOut,
       rotation,
-      onComplete: resetWheel,
+      onComplete,
     });
   }
 
-  function resetWheel() {
+  function onComplete() {
+    console.log({ gameWon });
     slowingDown = false;
     rotation = 0;
+    alert(gameWon ? "Awesome! You won." : "Sorry, you lost.");
   }
 
   onMount(() => {
