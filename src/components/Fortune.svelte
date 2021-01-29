@@ -80,16 +80,17 @@
     if (gameWon) {
       //DONE: Need to randomly select from _wins range ✔.
       //Compute prize with highest winning odds.
-      for (const _option of options) {
-        if (_option.odds >= highestOddsYet) {
-          optionHighestOds = _option;
-          highestOddsYet = _option.odds;
+      //ALERT: Use dropdown value for testing, revert back to looper on prod.
+      // for (const _option of options) {
+      //   if (_option.odds >= highestOddsYet) {
+      //     optionHighestOds = _option;
+      //     highestOddsYet = _option.odds;
 
-          rotation =
-            optionHighestOds.rotation.from +
-            Math.floor(1 + Math.random() * increments);
-        }
-      }
+      //   }
+      optionHighestOds = options.find((v) => v.id === selectedValue.value);
+      rotation =
+        optionHighestOds.rotation.from +
+        Math.floor(1 + Math.random() * increments);
       future = "Should win a " + optionHighestOds.id;
       console.log(future);
     } else {
@@ -149,8 +150,9 @@
     console.log("selected item:", event.detail);
     console.log({ _wins });
     selectedValue = event.detail;
+    console.log({ selectedValue });
 
-    _wins = _wins.map((v) => {
+    _wins = options.map((v) => {
       if (v.id == event.detail.value) {
         future = "Should win a " + event.detail.value;
         return (v.odds = 100);
